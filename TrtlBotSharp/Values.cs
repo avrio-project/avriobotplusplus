@@ -39,13 +39,13 @@ namespace TrtlBotSharp
 
         // Currency Variables
         public static string
-            coinName = "TurtleCoin",
-            coinSymbol = "TRTL",
-            coinAddressPrefix = "TRTL";
+            coinName = "AmityCoin",
+            coinSymbol = "AMIT",
+            coinAddressPrefix = "amit";
         public static decimal
-            coinUnits = 100;
+            coinUnits = 10000;
         public static int
-            coinAddressLength = 99;
+            coinAddressLength = 98;
 
         // Tipping Variables
         public static decimal
@@ -64,7 +64,7 @@ namespace TrtlBotSharp
             tipCustomReacts = new Dictionary<string, decimal>();
 
         // Faucet Variables
-        public static string
+         public static string
             faucetHost = "https://faucet.trtl.me/",
             faucetEndpoint = "https://faucet.trtl.me/balance",
             faucetAddress = "TRTLv14M1Q9223QdWMmJyNeY8oMjXs5TGP9hDc3GJFsUVdXtaemn1mLKA25Hz9PLu89uvDafx9A93jW2i27E5Q3a7rn8P2fLuVA";
@@ -79,14 +79,14 @@ namespace TrtlBotSharp
         public static string
             daemonHost = "127.0.0.1";
         public static int
-            daemonPort = 11898;
+            daemonPort = 31018;
 
         // Wallet Variables
         public static string
             walletHost = "127.0.0.1",
             walletRpcPassword = "password";
         public static int
-            walletPort = 8070,
-            walletUpdateDelay = 5000;
+            walletPort = 30070,
+            walletUpdateDelay = 15000;
     }
 }

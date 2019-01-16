@@ -16,19 +16,24 @@ namespace TrtlBotSharp
             string Output = "";
 
             // Requesting additional help
-            if (Remainder.ToLower() == "faucet")
+            /*if (Remainder.ToLower() == "faucet")
             {
                 Response.Title += string.Format(" - {0}faucet", TrtlBotSharp.botPrefix);
                 Response.AddField("Usage:", string.Format("{0}faucet", TrtlBotSharp.botPrefix));
                 Response.AddField("Description:", "Gives faucet information, including the donation address, a link to the faucet, and how much it has left");
             }
-            else if (Remainder.ToLower() == "hashrate")
-            {
+             
+	    else if (Remainder.ToLower() == "hashrate")
+            */ 
+	    
+	    if (Remainder.ToLower() == "hashrate") 
+	    {
                 Response.Title += string.Format(" - {0}hashrate", TrtlBotSharp.botPrefix);
                 Response.AddField("Usage:", string.Format("{0}hashrate", TrtlBotSharp.botPrefix));
                 Response.AddField("Description:", "Gives the current network hashrate");
             }
-            else if (Remainder.ToLower() == "difficulty")
+	    
+	    else if (Remainder.ToLower() == "difficulty")
             {
                 Response.Title += string.Format(" - {0}difficulty", TrtlBotSharp.botPrefix);
                 Response.AddField("Usage:", string.Format("{0}difficulty", TrtlBotSharp.botPrefix));
@@ -46,7 +51,13 @@ namespace TrtlBotSharp
                 Response.AddField("Usage:", string.Format("{0}supply", TrtlBotSharp.botPrefix));
                 Response.AddField("Description:", string.Format("Gives the total circulating supply of {0}", TrtlBotSharp.coinSymbol));
             }
-            else if (Remainder.ToLower() == "registerwallet")
+            else if (Remainder.ToLower() == "reward")
+	    {
+	        Response.Title += string.Format(" - {0}reward", TrtlBotSharp.botPrefix);
+	        Response.AddField("Usage:", string.Format("{0}reward <Value in H/s>", TrtlBotSharp.botPrefix));
+                Response.AddField("Description:", string.Format("Calculates a theoretical reward to the given \nhashrate at current difficulty"));
+	    }
+	    else if (Remainder.ToLower() == "registerwallet")
             {
                 Response.Title += string.Format(" - {0}registerwallet", TrtlBotSharp.botPrefix);
                 Response.AddField("Usage:", string.Format("{0}registerwallet <{1} Address>", TrtlBotSharp.botPrefix, TrtlBotSharp.coinSymbol));
@@ -116,30 +127,33 @@ namespace TrtlBotSharp
             else
             {
                 Output += "Informational:\n";
-                Output += "  help\tLists all available commands\n";
-                Output += "  faucet\tGives faucet information\n";
+                Output += " {0}help\tLists all available commands\n\n";
+                //Output += "  faucet\tGives faucet information\n";
                 Output += "Network:\n";
-                Output += "  hashrate\tGives current network hashrate\n";
-                Output += "  difficulty\tGives current network difficulty\n";
-                Output += "  height\tGives current network height\n";
-                Output += "  supply\tGives current circulating supply\n";
-                if (Context.Guild == null || !TrtlBotSharp.marketDisallowedServers.Contains(Context.Guild.Id))
+                Output += " {0}hashrate\tReturns current network hashrate\n";
+                Output += " {0}difficulty\tReturns current network difficulty\n";
+                Output += " {0}height\tReturns current highest blocknumber\n";
+                Output += " {0}supply\tReturns current circulating supply\n";
+                Output += " {0}dynamit\tReturns current network stats\n";
+		Output += " {0}reward\tCalculates reward to given H/s value\n\n"; 
+		/*if (Context.Guild == null || !TrtlBotSharp.marketDisallowedServers.Contains(Context.Guild.Id))
                 {
                     Output += "Market:\n";
                     Output += "  price\tGives current price\n";
                     Output += "  mcap\tGives current global marketcap\n";
                 }
-                Output += "Tipping:\n";
-                Output += "  registerwallet\tRegisters your wallet with the tip bot\n";
-                Output += "  updatewallet\tUpdates your registered wallet\n";
-                Output += "  wallet\tGives the wallet address for a specified user or your own address if no user is specified\n";
-                Output += "  deposit\tGives information on how to deposit into your tipping balance\n";
-                Output += "  withdraw\tWithdraws a specified amount from your tip jar into your registered wallet\n";
-                Output += "  balance\tGives your current tip jar balance\n";
-                Output += "  tip\tTips one or more users a specified amount\n";
-                Output += "  redirecttips\tSets whether you'd like tips sent directly to your wallet or redirected back into your tip jar";
-                Output = string.Format("```" + TrtlBotSharp.Prettify(Output) + "```**Note:** You can use *{0}help <Name of Command>* for " +
-                    "additional help with any command", TrtlBotSharp.botPrefix);
+               */ 
+		Output += "Tipping:\n";
+                Output += " {0}registerwallet\tRegisters your wallet address\n\twith the tip bot\n";
+                Output += " {0}updatewallet\tUpdates your registered wallet\n";
+                Output += " {0}wallet\tReturns your own wallet address\n";
+                Output += " {0}deposit\tGives information on how to deposit\n\tinto your tipping balance\n";
+                Output += " {0}withdraw\tWithdraws a specified amount from\n\tyour tip jar to your registered wallet\n";
+                Output += " {0}balance\tGives your current tip jar balance\n";
+                Output += " {0}tip\tTips one or more users\n\ta specified amount\n";
+                Output += " {0}redirecttips\tSets whether you'd like tips sent\n\tdirectly to your wallet or\n\tredirected back into your tip jar";
+                Output = string.Format("\n```" + TrtlBotSharp.Prettify(Output) + "```**Note:** You can use *{0}help <Name of Command (wihout \"{0}\")>* for " +
+                    "additional help with any command. \nNote: usage of commands **without < > -brackets** !", TrtlBotSharp.botPrefix);
                 Response.WithDescription(Output);
                 Response.WithTitle("Available Commands:");
             }
@@ -148,6 +162,7 @@ namespace TrtlBotSharp
             await ReplyAsync("", false, Response);
         }
 
+	/*
         [Command("faucet")]
         public async Task FaucetAsync([Remainder]string Remainder = "")
         {
@@ -168,5 +183,6 @@ namespace TrtlBotSharp
             // Send reply
             await ReplyAsync("", false, Response);
         }
+	*/
     }
 }

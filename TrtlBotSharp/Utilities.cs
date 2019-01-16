@@ -12,19 +12,56 @@ namespace TrtlBotSharp
         public static decimal GetSupply()
         {
             // Get last block header from daemon
-            JObject Result = Request.RPC(daemonHost, daemonPort, "getlastblockheader");
+            JObject Result = Request.RPC(daemonHost, daemonPort, "getlastblockheader", new JObject{["params"] = {}});
             if (Result.Count < 1 || Result.ContainsKey("error")) return 0;
-
+           
             // Use last block hash to get last block from the network
-            string LastBlockHash = (string)Result["block_header"]["hash"];
-            Result = Request.RPC(daemonHost, daemonPort, "f_block_json", new JObject { ["hash"] = LastBlockHash });
-            if (Result.Count < 1 || Result.ContainsKey("error")) return 0;
+            string LastBlockHashString = (string)Result["block_header"]["hash"]; //Jtoken
+	     
+	    JObject LastBlockHash = new JObject{["hash"] = LastBlockHashString};
+
+	    Result = Request.RPC(daemonHost, daemonPort, "f_block_json", new JObject{ ["hash"] = LastBlockHashString });
+	    if (Result.Count < 1 || Result.ContainsKey("error")) return 0;
 
             // Return current supply
-            return (decimal)Result["block"]["alreadyGeneratedCoins"] / 100;
+            return (decimal)Result["block"]["alreadyGeneratedCoins"] / coinUnits;
         }
 
-        // Gets the bot's wallet address
+	///  Gets coin Height
+        public static decimal GetHeight()
+        {
+            // Get height
+            decimal Height = 0;
+            JObject Result = Request.GET("http://" + TrtlBotSharp.daemonHost + ":" + TrtlBotSharp.daemonPort + "/getinfo");
+            if (Result.Count > 0 && !Result.ContainsKey("error"))
+                Height = (decimal)Result["height"];
+            
+	   return (decimal)Height;  
+        }
+        
+	public static decimal GetHashrate()
+        {
+            decimal Hashrate = 0;
+            JObject Result = Request.RPC(TrtlBotSharp.daemonHost, TrtlBotSharp.daemonPort, "getlastblockheader");
+            if (Result.Count > 0 && !Result.ContainsKey("error"))
+                Hashrate = (decimal)Result["block_header"]["difficulty"] / 120;
+
+
+	    return (decimal)Hashrate;
+	}
+    
+	public static decimal GetDifficulty()	
+	{
+            // Get last block header from daemon and calculate hashrate
+            decimal Difficulty = 0;
+            JObject Result = Request.RPC(TrtlBotSharp.daemonHost, TrtlBotSharp.daemonPort, "getlastblockheader");
+            if (Result.Count > 0 && !Result.ContainsKey("error"))
+                Difficulty = (decimal)Result["block_header"]["difficulty"];
+
+           return (decimal)Difficulty; 
+	}
+
+	// Gets the bot's wallet address
         public static Task SetAddress()
         {
             // Get address list from wallet
@@ -129,7 +166,7 @@ namespace TrtlBotSharp
             if (Address.Length != coinAddressLength) return false;
 
             // Check address prefix
-            if (Address.Substring(0, coinAddressPrefix.Length).ToLower() != coinAddressPrefix.ToLower()) return false;
+            if (Address.Substring(0, coinAddressPrefix.Length) != coinAddressPrefix.ToLower()) return false;
 
             // Verified as valid
             return true;

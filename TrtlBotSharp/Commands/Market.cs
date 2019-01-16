@@ -8,7 +8,8 @@ namespace TrtlBotSharp
 {
     public partial class Commands : ModuleBase<SocketCommandContext>
     {
-        [Command("price")]
+        /*
+	[Command("price")]
         public async Task PriceAsync([Remainder]string Remainder = "")
         {
             // Get current coin price
@@ -79,6 +80,6 @@ namespace TrtlBotSharp
                 await Context.Message.Author.SendMessageAsync(Response);
             }
             else await ReplyAsync(Response);
-        }
+        }*/
     }
 }

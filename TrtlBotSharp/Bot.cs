@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 
@@ -12,14 +13,21 @@ namespace TrtlBotSharp
 {
     partial class TrtlBotSharp
     {
-        // Initialization
+
+	private static ManualResetEvent resetEvent = new ManualResetEvent(false); // Stop Permanet Reading , CPUIssuses Test   
+        
+	// Initialization
         public static void Main(string[] args)
         {
             // Begin bot process in its own thread
             RunBotAsync();
+	    
+	    //CancelEvent, stopp Bot   
+	    Console.CancelKeyPress += (sender, eventArgs) => resetEvent.Set();
+            resetEvent.WaitOne();	    
 
-            // Wait for keypress to exit
-            Console.ReadKey();
+            // Wait for keypress to exit  // Removed to CPU Usaaege Issue Test
+            //Console.ReadKey();
 
             // Close the database connection
             CloseDatabase();
@@ -61,9 +69,9 @@ namespace TrtlBotSharp
             Log(0, "TrtlBot", "Setting default address");
             await SetAddress();
 
-            // Rest until a disconnect is detected
-            Disconnected = false;
-            while (!Disconnected) { }
+            // Rest until a disconnect is detected ### Removed to CPU Issuses Test
+            //Disconnected = false;
+            //while (!Disconnected) { }
         }
 
         private static bool Monitoring = false;
@@ -176,7 +184,7 @@ namespace TrtlBotSharp
                 // Check that user has enough balance for the tip
                 if (GetBalance(Reaction.UserId) < Convert.ToDecimal(Amount) * TippableUsers.Count + tipFee)
                 {
-                    await Reaction.User.Value.SendMessageAsync(string.Format("Your balance is too low! Amount + Fee = **{0:N}** {1}",
+                    await Reaction.User.Value.SendMessageAsync(string.Format("Your balance is too low! Amount + Fee = **{0:N4}** {1}",
                         Convert.ToDecimal(Amount) * TippableUsers.Count + tipFee, coinSymbol));
                     await Message.AddReactionAsync(new Emoji(tipLowBalanceReact));
                     return;
@@ -216,7 +224,7 @@ namespace TrtlBotSharp
                         var Response = new EmbedBuilder();
                         Response.WithTitle(string.Format("{0} wants to tip you!", _client.GetUser(Reaction.UserId).Username));
                         Response.Description = string.Format("Register your wallet with with `{0}registerwallet <your {1} address>` " +
-                            "to get started!\nTo create a wallet head to https://turtlecoin.lol/wallet/\nExtra Help: http://docs.turtlecoin.lol/",
+                            "to get started!\nTo create a wallet head to https://www.getamitycoin.org/wallet/wallet.html",
                             botPrefix, coinSymbol);
 
                         // Send reply
@@ -229,7 +237,7 @@ namespace TrtlBotSharp
                 // Check that user has enough balance for the tip
                 if (GetBalance(Reaction.UserId) < Amount + tipFee)
                 {
-                    await Reaction.User.Value.SendMessageAsync(string.Format("Your balance is too low! Amount + Fee = **{0:N}** {1}",
+                    await Reaction.User.Value.SendMessageAsync(string.Format("Your balance is too low! Amount + Fee = **{0:N4}** {1}",
                         Amount + tipFee, coinSymbol));
                     await Message.AddReactionAsync(new Emoji(tipLowBalanceReact));
                 }
