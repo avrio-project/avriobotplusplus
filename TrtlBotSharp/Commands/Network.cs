@@ -22,7 +22,7 @@ namespace TrtlBotSharp
 	   		
 			// max 720 blocks / day fehlt noch 
 			decimal blockperday = (86400 / avgsec);
-	   		decimal rewardperday = (blockperday * 1862621)/10000;
+	   		decimal rewardperday = (blockperday * 1862621)/coinUnits;
 			
 			
 
