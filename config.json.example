@@ -15,11 +15,7 @@
 "tipFailedReact": "🆘",
 "tipLowBalanceReact": "❌",
 "tipJoinReact": ":tips:",
-"tipCustomReacts":{
-":morpheus:": 0.0500,
-":neo:": 0.0500,
-":amit:": 0.1000
-},
+"tipCustomReacts":{},
 "faucetHost": "",
 "faucetEndpoint": "",
 "faucetAddress": "",
