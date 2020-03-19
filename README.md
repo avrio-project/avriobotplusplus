@@ -1,6 +1,6 @@
-# TrtlBotSharp
+# Avrio Bot ++
 A C# recode/reworking of Madk's TrtlBot++
-    Modified to use with AmityCoin
+    Modified to use with Avrio
 
 	--added Command .dynamit as alias to complete networkstats block
 	--added Command .reward to check blocktimes and for miners to calc a reward based on hashrate
