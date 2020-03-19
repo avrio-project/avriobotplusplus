@@ -10,7 +10,8 @@ namespace TrtlBotSharp
 {
     public partial class Commands : ModuleBase<SocketCommandContext>
     {
-        [Command("registerwallet")]
+	
+	[Command("registerwallet")]
         public async Task RegisterWalletAsync(string Address, [Remainder]string Remainder = "")
         {
             // Delete original message
@@ -45,6 +46,7 @@ namespace TrtlBotSharp
                 await Context.Message.Author.SendMessageAsync("", false, Response);
             }
         }
+
 
         [Command("updatewallet")]
         public async Task UpdateWalletAsync(string Address, [Remainder]string Remainder = "")
@@ -238,14 +240,14 @@ namespace TrtlBotSharp
             // Check that amount is over the minimum fee
             else if (Convert.ToDecimal(Amount) < TrtlBotSharp.Minimum)//TrtlBotSharp.Fee)
             {
-                await ReplyAsync(string.Format("Amount must be at least {0:N} {1}", TrtlBotSharp.Minimum/*Fee*/, TrtlBotSharp.coinSymbol));
+                await ReplyAsync(string.Format("Amount must be at least {0:N4} {1}", TrtlBotSharp.Minimum/*Fee*/, TrtlBotSharp.coinSymbol));
                 return;
             }
 
             // Check if user has enough balance
             else if (TrtlBotSharp.GetBalance(Context.Message.Author.Id) < Convert.ToDecimal(Amount) + TrtlBotSharp.tipFee)
             {
-                await Context.Message.Author.SendMessageAsync(string.Format("Your balance is too low! Amount + Fee = **{0:N}** {1}",
+                await Context.Message.Author.SendMessageAsync(string.Format("Your balance is too low! Amount + Fee = **{0:N4}** {1}",
                     Convert.ToDecimal(Amount) + TrtlBotSharp.tipFee, TrtlBotSharp.coinSymbol));
                 await Context.Message.AddReactionAsync(new Emoji(TrtlBotSharp.tipLowBalanceReact));
             }
@@ -277,7 +279,7 @@ namespace TrtlBotSharp
                 decimal Balance = TrtlBotSharp.GetBalance(Context.Message.Author.Id);
 
                 // Send reply
-                await Context.Message.Author.SendMessageAsync(string.Format("You have **{0:N}** {1} in your tip jar", Balance, TrtlBotSharp.coinSymbol));
+                await Context.Message.Author.SendMessageAsync(string.Format("You have **{0:N4}** {1} in your tip jar", Balance, TrtlBotSharp.coinSymbol));
             }
         }
 
@@ -294,7 +296,7 @@ namespace TrtlBotSharp
             // Check that amount is over the minimum fee
             if (Convert.ToDecimal(Amount) < TrtlBotSharp.Minimum)//TrtlBotSharp.Fee)
             {
-                await ReplyAsync(string.Format("Amount must be at least {0:N} {1}", TrtlBotSharp.Minimum/*Fee*/, TrtlBotSharp.coinSymbol));
+                await ReplyAsync(string.Format("Amount must be at least {0:N4} {1}", TrtlBotSharp.Minimum/*Fee*/, TrtlBotSharp.coinSymbol));
                 return;
             }
 
@@ -323,13 +325,13 @@ namespace TrtlBotSharp
             // Check that user has enough balance for the tip
             if (Address == "" && TrtlBotSharp.GetBalance(Context.Message.Author.Id) < Convert.ToDecimal(Amount) * TippableUsers.Count + TrtlBotSharp.tipFee)
             {
-                await Context.Message.Author.SendMessageAsync(string.Format("Your balance is too low! Amount + Fee = **{0:N}** {1}",
+                await Context.Message.Author.SendMessageAsync(string.Format("Your balance is too low! Amount + Fee = **{0:N4}** {1}",
                     Convert.ToDecimal(Amount) * TippableUsers.Count + TrtlBotSharp.tipFee, TrtlBotSharp.coinSymbol));
                 await Context.Message.AddReactionAsync(new Emoji(TrtlBotSharp.tipLowBalanceReact));
             }
             else if (TrtlBotSharp.GetBalance(Context.Message.Author.Id) < Convert.ToDecimal(Amount) + TrtlBotSharp.tipFee)
             {
-                await Context.Message.Author.SendMessageAsync(string.Format("Your balance is too low! Amount + Fee = **{0:N}** {1}",
+                await Context.Message.Author.SendMessageAsync(string.Format("Your balance is too low! Amount + Fee = **{0:N4}** {1}",
                     Convert.ToDecimal(Amount) + TrtlBotSharp.tipFee, TrtlBotSharp.coinSymbol));
                 await Context.Message.AddReactionAsync(new Emoji(TrtlBotSharp.tipLowBalanceReact));
             }
@@ -355,7 +357,7 @@ namespace TrtlBotSharp
                                 var Response = new EmbedBuilder();
                                 Response.WithTitle(string.Format("{0} wants to tip you!", Context.Message.Author.Username));
                                 Response.Description = string.Format("Register your wallet with with `{0}registerwallet <your {1} address>` " +
-                                    "to get started!\nTo create a wallet head to https://turtlecoin.lol/wallet/\nExtra Help: http://docs.turtlecoin.lol/",
+                                    "to get started!\nTo create a wallet head to https://www.getamitycoin.org/ or \ndirect to\n https://www.getamitycoin.org/wallet/wallet.html",
                                     TrtlBotSharp.botPrefix, TrtlBotSharp.coinSymbol);
 
                                 // Send reply
